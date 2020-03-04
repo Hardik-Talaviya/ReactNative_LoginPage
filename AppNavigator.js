@@ -15,13 +15,28 @@ const AppNavigator = createStackNavigator({
   Login: {
     screen: Login,
     navigationOptions: {
-      header: null        // this will do your task
+      title:"Login Screen",
+      headerLeft: null,
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: '#00BCD4'
+      },
+      headerTitleStyle: {
+        flex: 1
+      },        // this will do your task
     }
   },
   SignUp: {
     screen: SignUp,
     navigationOptions: {
-      header: null        // this will do your task
+      title:"SignUp Screen",
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: '#00BCD4'
+      },
+      headerTitleStyle: {
+        flex: 1
+      },        // this will do your task
     }
   },
   AddDetails: {
@@ -51,13 +66,15 @@ const AppNavigator = createStackNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
-      title: "Home",
-      headerTitleStyle: {
-        alignSelf: 'center',
-        textAlign: 'center',
-        marginLeft: -40,
-        flex: 1
+      title:"Home Screen",
+      headerLeft: null,
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: '#00BCD4'
       },
+      headerTitleStyle: {
+        flex: 1
+      },        // this will do your task
     }
   },
 },

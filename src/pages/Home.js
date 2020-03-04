@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, ActivityIndicator, ScrollView, Alert } from 'react-native';
+import { Platform, StyleSheet, Text, View, ActivityIndicator, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import firebase from 'firebase';
@@ -74,40 +74,67 @@ export default class Home extends Component {
         <View style={styles.container}>
           <Text style={styles.welcome}>Welcome</Text>
           <Text style={styles.instructions}>{this.state.myEmail}</Text>
-          <Text style={{ marginTop: 50, fontSize: 25, color: '#333333' }}>This is my</Text>
-          <Text style={styles.welcome}>first project</Text>
-          <Text style={styles.welcome}>using</Text>
-          <Text style={styles.instructions}>React Native</Text>
+          <Text style={{ fontSize: 25, color: '#333333' }}>To</Text>
+          {/* <Text style={styles.welcome}>first project</Text>
+          <Text style={styles.welcome}>using</Text> */}
+          <Text style={styles.instructions}>React Native Project</Text>
 
-          {this.state.isLoading == true ? (
-            <ActivityIndicator style={{ marginTop: 5, marginBottom: -41 }} color='#e93766' size="large" animating={this.state.isLoading} />
-          ) : null}
+        </View>
 
-          <View style={[{ width: "60%" }]}>
+        <View style={styles.inlineButton}>
 
-            <Button
-              label="Add Details"
-              styles={{ button: styles.FirstButton, label: styles.buttonWhiteText }}
-              onPress={this.buttonClickListenerAddDetails} />
+          <View style={styles.firstButtonRow}>
+            <TouchableOpacity
+              style={styles.LoginButtonStyle}
+              activeOpacity={.7}
+              onPress={this.buttonClickListenerAddDetails}>
+              <View style={styles.inline}>
+                <Text style={[styles.buttonWhiteText, styles.buttonBigText]}>Add Details</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
 
-            <Button
-              label="Show Details"
-              styles={{ button: styles.primaryButton, label: styles.buttonWhiteText }}
-              onPress={this.buttonClickListenerShowDetails} />
+          <View style={styles.firstButtonRow}>
+            <TouchableOpacity
+              style={styles.LoginButtonStyle}
+              activeOpacity={.7}
+              onPress={this.buttonClickListenerShowDetails}>
+              <View style={styles.inline}>
+                <Text style={[styles.buttonWhiteText, styles.buttonBigText]}>Show Details</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
 
-            <Button
-              label="Show Map"
-              styles={{ button: styles.primaryButton, label: styles.buttonWhiteText }}
-              onPress={this.buttonClickListenerShowMap} />
+        </View>
+        <View style={styles.inlineButton}>
 
-            <Button
-              label="Log Out"
-              styles={{ button: styles.primaryButton, label: styles.buttonWhiteText }}
-              onPress={this.buttonClickListener} />
+          <View style={styles.secondButtonRow}>
+            <TouchableOpacity
+              style={styles.LoginButtonStyle}
+              activeOpacity={.7}
+              onPress={this.buttonClickListenerShowMap}>
+              <View style={styles.inline}>
+                <Text style={[styles.buttonWhiteText, styles.buttonBigText]}>Show Map</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.secondButtonRow}>
+            <TouchableOpacity
+              style={styles.LoginButtonStyle}
+              activeOpacity={.7}
+              onPress={this.buttonClickListener}>
+              <View style={styles.inline}>
+                {this.state.isLoading == true ? (
+                  <ActivityIndicator style={{ marginStart: -20, marginEnd: 20, marginTop: 10 }} color='#fff' size="large" animating={this.state.isLoading} />
+                ) : null}
+                <Text style={[styles.buttonWhiteText, styles.buttonBigText]}>Log Out</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
 
+      </ScrollView>
     );
   }
 }
@@ -117,7 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFF',
   },
   welcome: {
     fontSize: 25,
@@ -139,13 +166,43 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#34A853'
   },
-  primaryButton: {
-    marginBottom: 30,
-    height: 50,
-    backgroundColor: '#34A853'
+  inline: {
+    height: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  inlineButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  firstButtonRow: {
+    marginTop: 50,
+    flex: 1,
+    justifyContent: 'center'
+  },
+  secondButtonRow: {
+    marginTop: 20,
+    flex: 1,
+    justifyContent: 'center'
   },
   buttonWhiteText: {
     fontSize: 20,
     color: '#FFF',
   },
+  buttonBigText: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  LoginButtonStyle: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginRight:5,
+    marginLeft:5,
+    backgroundColor: '#00BCD4',
+    borderRadius: 7,
+    borderWidth: 1,
+    borderColor: '#fff'
+  }
 });

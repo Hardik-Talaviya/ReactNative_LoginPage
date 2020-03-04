@@ -3,9 +3,13 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
+  Image,
   View,
   TextInput,
   ScrollView,
+  Animated,
+  Easing,
+  TouchableOpacity,
   ActivityIndicator,
   Alert
 } from 'react-native';
@@ -16,6 +20,7 @@ import Container from '../components/Container';
 import Button from '../components/Button';
 import Label from '../components/Label';
 import firebase from 'firebase';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class Login extends Component {
   constructor(props) {
@@ -26,8 +31,22 @@ export default class Login extends Component {
       ErrorStatus: true,
       ErrorStatusPass: true,
       isLoading: false,
+      spinValue: new Animated.Value(0),
     }
 
+  }
+
+  componentDidMount() {
+    Animated.loop(
+      Animated.timing(
+        this.state.spinValue,                                   // The animated value to drive
+        {
+          toValue: this.props.toValue || 1,                   // Animate to 360/value
+          duration: this.props.duration || 2000,              // Make it take a while
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }
+      )).start(this.props.onFinishedAnimating);                    // Starts the animation
   }
 
   onEnterText = (email) => {
@@ -100,17 +119,28 @@ export default class Login extends Component {
   }
 
   render() {
+    let spin = this.state.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    });
     return (
       <ScrollView style={styles.scroll}>
 
-        <Container>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Animated.Image
+            tintColor='#00BCD4'
+            source={require('ReactNative_LoginPage/src/Images/react_native.png')}
+            style={{ transform: [{ rotate: spin }], width: 100, height: 100, marginBottom: 20 }} />
+        </View>
+
+        {/* <Container>
           <Button
             label="Forgot Login/Pass"
             styles={{ button: styles.alignRight, label: styles.label }}
             onPress={this.buttonClickListenerForgot} />
-        </Container>
+        </Container> */}
 
-        <Container>
+        <View style={{ marginTop: 10 }}>
           <Label text="Username or Email" />
           <TextInput
             style={styles.textInput}
@@ -120,9 +150,9 @@ export default class Login extends Component {
               * Please enter email.
            </Text>
           ) : null}
-        </Container>
+        </View>
 
-        <Container>
+        <View style={{ marginTop: 10 }}>
           <Label text="Password" />
           <TextInput
             secureTextEntry={true}
@@ -133,17 +163,15 @@ export default class Login extends Component {
               * Please enter password.
              </Text>
           ) : null}
-        </Container>
+        </View>
 
-        <Container>
-          <Button
-            label="Create new account"
-            styles={{ button: styles.alignRight, label: styles.label }}
-            onPress={this.buttonClickListenerSignUp}
-          />
-        </Container>
+        <Button
+          label="Create new account"
+          styles={{ button: styles.alignRight, label: styles.label }}
+          onPress={this.buttonClickListenerSignUp}
+        />
 
-        <Container>
+        {/* <Container>
           <Button
             styles={{ button: styles.transparentButton }}
             onPress={this.press.bind(this)}>
@@ -153,11 +181,22 @@ export default class Login extends Component {
               <Text style={styles.buttonBlueText}>with Facebook</Text>
             </View>
           </Button>
-        </Container>
+        </Container> */}
 
-        <View style={styles.footer}>
-          <Container>
-            <Button
+        <View style={styles.primaryButton}>
+          <TouchableOpacity
+            style={styles.LoginButtonStyle}
+            activeOpacity={.7}
+            onPress={this.buttonClickListener}>
+            <View style={styles.inline}>
+              {this.state.isLoading == true ? (
+                <ActivityIndicator style={{ marginStart: -20, marginEnd: 20, marginTop: 10 }} color='#fff' size="large" animating={this.state.isLoading} />
+              ) : null}
+              <Text style={[styles.buttonWhiteText, styles.buttonBigText]}>Log In</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        {/* <Button
               styles={{ button: styles.primaryButton, label: styles.buttonWhiteText }}
               onPress={this.buttonClickListener}>
               <View style={styles.inline}>
@@ -166,11 +205,10 @@ export default class Login extends Component {
                 ) : null}
                 <Text style={[styles.buttonWhiteText, styles.buttonBigText]}>Log In</Text>
               </View>
-            </Button>
-          </Container>
-          <Container>
-          </Container>
-        </View>
+            </Button> */}
+
+        <Container>
+        </Container>
 
       </ScrollView>
     );
@@ -184,25 +222,26 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
 
   scroll: {
-    backgroundColor: '#E1D7D8',
+    backgroundColor: '#FFF',
     padding: 25,
     flexDirection: 'column'
   },
   label: {
-    color: '#0d8898',
+    marginTop: 5,
+    color: '#00BCD4',
     fontSize: 15
   },
   alignRight: {
-    height: 50,
+    height: 20,
     alignSelf: 'flex-end'
   },
   textInput: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    borderRadius: 25,
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderRadius: 12,
     height: 50,
-    fontSize: 20,
-    backgroundColor: '#FFF'
+    fontSize: 18,
+    backgroundColor: '#F1FCFF'
   },
   transparentButton: {
     height: 50,
@@ -218,6 +257,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   inline: {
+    height: 25,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
@@ -235,15 +275,23 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   primaryButton: {
-    height: 50,
-    backgroundColor: '#34A853'
-  },
-  footer: {
-    marginTop: 50
+    marginTop: 30,
+    flex: 1,
+    justifyContent: 'center'
   },
   errorMessage: {
     marginTop: 2,
-    fontSize: 15,
+    fontSize: 12,
     color: "red",
+  },
+  LoginButtonStyle: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    backgroundColor: '#00BCD4',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff'
   }
 });
